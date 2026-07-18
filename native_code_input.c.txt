@@ -38,13 +38,3 @@ bool ExportImageAsCode(Image image, const char *fileName);                      
 # Deconstructor (create FreeImage C function which recieves void*, calls UnloadImage on *image)
 
 void UnloadImage(Image image);                                                                     // Unload image from CPU memory (RAM)
-
-# Nothing
-
-typedef _InitWindowRay  = Void Function(Int32, Int32, Pointer<Utf8>);
-typedef _InitWindowDart = void Function(int, int, Pointer<Utf8>);
-final _initWindow = _dylib.lookupFunction<_InitWindowRay, _InitWindowDart>('InitWindow');
-
-typedef _IsWindowReadyRay = Bool Function();
-typedef _IsWindowReadyDart = bool Function();
-final _isWindowReady = _dylib.lookupFunction<_IsWindowReadyRay, _IsWindowReadyDart>('IsWindowReady');
