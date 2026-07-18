@@ -1,0 +1,50 @@
+// Image, pixel data stored in CPU memory (RAM)
+typedef struct Image {
+    void *data;             // Image raw data
+    Image* test;
+    Image what;
+    int width;              // Image base width
+    int height;             // Image base height
+    int mipmaps;            // Mipmap levels, 1 by default
+    int format;             // Data format (PixelFormat type)
+} Image;
+
+# Constructor (New return instance)
+
+Image LoadImage(const char *fileName);                                                             // Load image from file into CPU memory (RAM)
+
+# Named Constructor (New return instance)
+
+Image LoadImageRaw(const char *fileName, int width, int height, int format, int headerSize);       // Load image from RAW file data
+Image LoadImageAnim(const char *fileName, int *frames);                                            // Load image sequence from file (frames appended to image.data)
+Image LoadImageAnimFromMemory(const char *fileType, const unsigned char *fileData, int dataSize, int *frames); // Load image sequence from memory buffer
+Image LoadImageFromMemory(const char *fileType, const unsigned char *fileData, int dataSize);      // Load image from memory buffer, fileType refers to extension: i.e. '.png'
+Image LoadImageFromTexture(Texture2D texture);                                                     // Load image from GPU texture data
+Image LoadImageFromScreen(void);                                                                   // Load image from screen buffer and (screenshot)
+
+# Methods (Assumes first parameter is the class instance)
+
+unsigned char *ExportImageToMemory(Image image, const char *fileType, int *fileSize);              // Export image to memory buffer
+void ImageClearBackground(Image *dst, Color color);                                                // Clear image background with given color
+void ImageDrawPixel(Image *dst, int posX, int posY, Color color);                                  // Draw pixel within an image
+void ImageDrawPixelV(Image *dst, Vector2 position, Color color);                                   // Draw pixel within an image (Vector version)
+void ImageDrawLine(Image *dst, int startPosX, int startPosY, int endPosX, int endPosY, Color color); // Draw line within an image
+void ImageDrawLineV(Image *dst, Vector2 start, Vector2 end, Color color);                          // Draw line within an image (Vector version)
+void ImageDrawLineEx(Image *dst, Vector2 start, Vector2 end, int thick, Color color);              // Draw a line defining thickness within an image
+bool IsImageValid(Image image);                                                                    // Check if an image is valid (data and parameters)
+bool ExportImage(Image image, const char *fileName);                                               // Export image data to file, returns true on success
+bool ExportImageAsCode(Image image, const char *fileName);                                         // Export image as code file defining an array of bytes, returns true on success
+
+# Deconstructor (create FreeImage C function which recieves void*, calls UnloadImage on *image)
+
+void UnloadImage(Image image);                                                                     // Unload image from CPU memory (RAM)
+
+# Nothing
+
+typedef _InitWindowRay  = Void Function(Int32, Int32, Pointer<Utf8>);
+typedef _InitWindowDart = void Function(int, int, Pointer<Utf8>);
+final _initWindow = _dylib.lookupFunction<_InitWindowRay, _InitWindowDart>('InitWindow');
+
+typedef _IsWindowReadyRay = Bool Function();
+typedef _IsWindowReadyDart = bool Function();
+final _isWindowReady = _dylib.lookupFunction<_IsWindowReadyRay, _IsWindowReadyDart>('IsWindowReady');

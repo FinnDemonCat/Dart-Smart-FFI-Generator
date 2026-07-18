@@ -1,0 +1,249 @@
+// ========================================================================================================================
+//                                                          Image                                                          
+// ========================================================================================================================
+
+/// Image, pixel data stored in CPU memory (RAM)
+final class _Image extends Struct {
+	external Pointer<Void> data;  // Image raw data
+	external Pointer<_Image> test;
+	external _Image what;
+	Int32() external int width;   // Image base width
+	Int32() external int height;  // Image base height
+	Int32() external int mipmaps; // Mipmap levels, 1 by default
+	Int32() external int format;  // Data format (PixelFormat type)
+}
+
+// Load image from file into CPU memory (RAM)
+typedef _LoadImageC    = _Image Function(Pointer<Utf8>);
+typedef _LoadImageDart = _Image Function(Pointer<Utf8>);
+final _loadImage = _dylib.lookupFunction<_LoadImageC, _LoadImageDart>('LoadImage');
+
+// Load image from RAW file data
+typedef _LoadImageRawC    = _Image Function(Pointer<Utf8>, Int32, Int32, Int32, Int32);
+typedef _LoadImageRawDart = _Image Function(Pointer<Utf8>, int, int, int, int);
+final _loadImageRaw = _dylib.lookupFunction<_LoadImageRawC, _LoadImageRawDart>('LoadImageRaw');
+
+// Load image sequence from file (frames appended to image.data)
+typedef _LoadImageAnimC    = _Image Function(Pointer<Utf8>, Pointer<Int32>);
+typedef _LoadImageAnimDart = _Image Function(Pointer<Utf8>, Pointer<Int32>);
+final _loadImageAnim = _dylib.lookupFunction<_LoadImageAnimC, _LoadImageAnimDart>('LoadImageAnim');
+
+// Load image sequence from memory buffer
+typedef _LoadImageAnimFromMemoryC    = _Image Function(Pointer<Utf8>, Pointer<Uint8>, Int32, Pointer<Int32>);
+typedef _LoadImageAnimFromMemoryDart = _Image Function(Pointer<Utf8>, Pointer<Uint8>, int, Pointer<Int32>);
+final _loadImageAnimFromMemory = _dylib.lookupFunction<_LoadImageAnimFromMemoryC, _LoadImageAnimFromMemoryDart>('LoadImageAnimFromMemory');
+
+// Load image from memory buffer, fileType refers to extension: i.e. '.png'
+typedef _LoadImageFromMemoryC    = _Image Function(Pointer<Utf8>, Pointer<Uint8>, Int32);
+typedef _LoadImageFromMemoryDart = _Image Function(Pointer<Utf8>, Pointer<Uint8>, int);
+final _loadImageFromMemory = _dylib.lookupFunction<_LoadImageFromMemoryC, _LoadImageFromMemoryDart>('LoadImageFromMemory');
+
+// Load image from GPU texture data
+typedef _LoadImageFromTextureC    = _Image Function(_Texture2D);
+typedef _LoadImageFromTextureDart = _Image Function(_Texture2D);
+final _loadImageFromTexture = _dylib.lookupFunction<_LoadImageFromTextureC, _LoadImageFromTextureDart>('LoadImageFromTexture');
+
+// Load image from screen buffer and (screenshot)
+typedef _LoadImageFromScreenC    = _Image Function();
+typedef _LoadImageFromScreenDart = _Image Function();
+final _loadImageFromScreen = _dylib.lookupFunction<_LoadImageFromScreenC, _LoadImageFromScreenDart>('LoadImageFromScreen');
+
+// Unload image from CPU memory (RAM)
+typedef _UnloadImageC    = Void Function(_Image);
+typedef _UnloadImageDart = void Function(_Image);
+final _unloadImage = _dylib.lookupFunction<_UnloadImageC, _UnloadImageDart>('UnloadImage');
+
+// Export image to memory buffer
+typedef _ExportImageToMemoryC    = Pointer<Uint8> Function(_Image, Pointer<Utf8>, Pointer<Int32>);
+typedef _ExportImageToMemoryDart = Pointer<Uint8> Function(_Image, Pointer<Utf8>, Pointer<Int32>);
+final _exportImageToMemory = _dylib.lookupFunction<_ExportImageToMemoryC, _ExportImageToMemoryDart>('ExportImageToMemory');
+
+// Clear image background with given color
+typedef _ImageClearBackgroundC    = Void Function(Pointer<_Image>, _Color);
+typedef _ImageClearBackgroundDart = void Function(Pointer<_Image>, _Color);
+final _imageClearBackground = _dylib.lookupFunction<_ImageClearBackgroundC, _ImageClearBackgroundDart>('ImageClearBackground');
+
+// Draw pixel within an image
+typedef _ImageDrawPixelC    = Void Function(Pointer<_Image>, Int32, Int32, _Color);
+typedef _ImageDrawPixelDart = void Function(Pointer<_Image>, int, int, _Color);
+final _imageDrawPixel = _dylib.lookupFunction<_ImageDrawPixelC, _ImageDrawPixelDart>('ImageDrawPixel');
+
+// Draw pixel within an image (Vector version)
+typedef _ImageDrawPixelVC    = Void Function(Pointer<_Image>, _Vector2, _Color);
+typedef _ImageDrawPixelVDart = void Function(Pointer<_Image>, _Vector2, _Color);
+final _imageDrawPixelV = _dylib.lookupFunction<_ImageDrawPixelVC, _ImageDrawPixelVDart>('ImageDrawPixelV');
+
+// Draw line within an image
+typedef _ImageDrawLineC    = Void Function(Pointer<_Image>, Int32, Int32, Int32, Int32, _Color);
+typedef _ImageDrawLineDart = void Function(Pointer<_Image>, int, int, int, int, _Color);
+final _imageDrawLine = _dylib.lookupFunction<_ImageDrawLineC, _ImageDrawLineDart>('ImageDrawLine');
+
+// Draw line within an image (Vector version)
+typedef _ImageDrawLineVC    = Void Function(Pointer<_Image>, _Vector2, _Vector2, _Color);
+typedef _ImageDrawLineVDart = void Function(Pointer<_Image>, _Vector2, _Vector2, _Color);
+final _imageDrawLineV = _dylib.lookupFunction<_ImageDrawLineVC, _ImageDrawLineVDart>('ImageDrawLineV');
+
+// Draw a line defining thickness within an image
+typedef _ImageDrawLineExC    = Void Function(Pointer<_Image>, _Vector2, _Vector2, Int32, _Color);
+typedef _ImageDrawLineExDart = void Function(Pointer<_Image>, _Vector2, _Vector2, int, _Color);
+final _imageDrawLineEx = _dylib.lookupFunction<_ImageDrawLineExC, _ImageDrawLineExDart>('ImageDrawLineEx');
+
+// Check if an image is valid (data and parameters)
+typedef _IsImageValidC    = Bool Function(_Image);
+typedef _IsImageValidDart = bool Function(_Image);
+final _isImageValid = _dylib.lookupFunction<_IsImageValidC, _IsImageValidDart>('IsImageValid');
+
+// Export image data to file, returns true on success
+typedef _ExportImageC    = Bool Function(_Image, Pointer<Utf8>);
+typedef _ExportImageDart = bool Function(_Image, Pointer<Utf8>);
+final _exportImage = _dylib.lookupFunction<_ExportImageC, _ExportImageDart>('ExportImage');
+
+// Export image as code file defining an array of bytes, returns true on success
+typedef _ExportImageAsCodeC    = Bool Function(_Image, Pointer<Utf8>);
+typedef _ExportImageAsCodeDart = bool Function(_Image, Pointer<Utf8>);
+final _exportImageAsCode = _dylib.lookupFunction<_ExportImageAsCodeC, _ExportImageAsCodeDart>('ExportImageAsCode');
+
+// Unload image from CPU memory (RAM)
+typedef _FreeImageC    = Void Function(Pointer<Void> token);
+typedef _FreeImageDart = void Function(Pointer<Void> token);
+final _freeImage = _dyReleaseLib.lookup<NativeFunction<_FreeImageC>>('FreeImage');
+
+// ========================================================================================================================
+//                                                      Wrapper Class                                                      
+// ========================================================================================================================
+
+/// Image, pixel data stored in CPU memory (RAM)
+class Image extends NativeWrapper<_Image> {
+	_Image get ref => pointer.ref;
+	set ref(_Image value) => pointer.ref = value;
+
+	/// Image raw data
+	Pointer<Void> get data => ref.data;
+	Pointer<_Image> get test => ref.test;
+	_Image get what => ref.what;
+	/// Image base width
+	int get width => ref.width;
+	/// Image base height
+	int get height => ref.height;
+	/// Mipmap levels, 1 by default
+	int get mipmaps => ref.mipmaps;
+	/// Data format (PixelFormat type)
+	int get format => ref.format;
+
+	set data(Pointer<Void> value) => ref.data = value;
+	set test(Image value) => ref.test = value.pointer;
+	set what(Image value) => ref.what = value.ref;
+	set width(int value) => ref.width = value;
+	set height(int value) => ref.height = value;
+	set mipmaps(int value) => ref.mipmaps = value;
+	set format(int value) => ref.format = value;
+
+	// ignore: unused_element_parameter, unused_element
+	Image._Encapsulate(super.pointer,{ super.IsOwner, super.length }): super.fromAddress() {
+		if (IsOwner)
+			_nativeFinalizer.attach(this, pointer, detach: this);
+	}
+
+	// ignore: unused_element_parameter, unused_element
+	Image._Recieve(_Image result): super(sizeOf<_Image>()) {
+		ref = result;
+		_nativeFinalizer.attach(this, pointer, detach: this);
+	}
+
+	// ==================================== Constructor =====================================
+
+	factory Image(Pointer<Utf8> fileName) {
+		_Image result = _exportImageAsCode(fileName);
+
+		Image image = Image._Recieve(result);
+		return image;
+	}
+
+	// ================================= Named Constructor ==================================
+
+	/// Unload image from CPU memory (RAM)
+	factory Image.LoadRaw(Pointer<Utf8> fileName, int width, int height, int format, int headerSize) {
+		_Image result = _loadImageRaw(fileName, width, height, format, headerSize);
+		Image image = Image._Recieve(result);
+		return image;
+	}
+
+	/// Unload image from CPU memory (RAM)
+	factory Image.LoadAnim(Pointer<Utf8> fileName, Pointer<Int32> frames) {
+		_Image result = _loadImageAnim(fileName, frames);
+		Image image = Image._Recieve(result);
+		return image;
+	}
+
+	/// Unload image from CPU memory (RAM)
+	factory Image.LoadAnimFromMemory(Pointer<Utf8> fileType, Pointer<Uint8> fileData, int dataSize, Pointer<Int32> frames) {
+		_Image result = _loadImageAnimFromMemory(fileType, fileData, dataSize, frames);
+		Image image = Image._Recieve(result);
+		return image;
+	}
+
+	/// Unload image from CPU memory (RAM)
+	factory Image.LoadFromMemory(Pointer<Utf8> fileType, Pointer<Uint8> fileData, int dataSize) {
+		_Image result = _loadImageFromMemory(fileType, fileData, dataSize);
+		Image image = Image._Recieve(result);
+		return image;
+	}
+
+	/// Unload image from CPU memory (RAM)
+	factory Image.LoadFromTexture(Texture2D texture) {
+		_Image result = _loadImageFromTexture(texture.ref);
+		Image image = Image._Recieve(result);
+		return image;
+	}
+
+	/// Unload image from CPU memory (RAM)
+	factory Image.LoadFromScreen() {
+		_Image result = _loadImageFromScreen();
+		Image image = Image._Recieve(result);
+		return image;
+	}
+
+	// ====================================== Methods =======================================
+
+	/// Export image to memory buffer
+	Pointer<Uint8> ExportToMemory(Pointer<Utf8> fileType, Pointer<Int32> fileSize) => _exportImageToMemory(ref, fileType, fileSize);
+	/// Clear image background with given color
+	void ClearBackground(Color color) => _imageClearBackground(pointer, color.ref);
+	/// Draw pixel within an image
+	void DrawPixel(int posX, int posY, Color color) => _imageDrawPixel(pointer, posX, posY, color.ref);
+	/// Draw pixel within an image (Vector version)
+	void DrawPixelV(Vector2 position, Color color) => _imageDrawPixelV(pointer, position.ref, color.ref);
+	/// Draw line within an image
+	void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color) => _imageDrawLine(pointer, startPosX, startPosY, endPosX, endPosY, color.ref);
+	/// Draw line within an image (Vector version)
+	void DrawLineV(Vector2 start, Vector2 end, Color color) => _imageDrawLineV(pointer, start.ref, end.ref, color.ref);
+	/// Draw a line defining thickness within an image
+	void DrawLineEx(Vector2 start, Vector2 end, int thick, Color color) => _imageDrawLineEx(pointer, start.ref, end.ref, thick, color.ref);
+	/// Check if an image is valid (data and parameters)
+	bool IsValid() => _isImageValid(ref);
+	/// Export image data to file, returns true on success
+	bool Export(Pointer<Utf8> fileName) => _exportImage(ref, fileName);
+	/// Export image as code file defining an array of bytes, returns true on success
+	bool ExportAsCode(Pointer<Utf8> fileName) => _exportImageAsCode(ref, fileName);
+
+	// =================================== Deconstructor ====================================
+
+	static final _nativeFinalizer = NativeFinalizer(_freeImage);
+
+	// Unload image from CPU memory (RAM)
+	@override
+	Free() {
+		_unloadImage(_Image);
+		_nativeFinalizer.detach(this);
+		super.Free();
+	}
+
+	\*
+	__declspec(dllexport) void FreeImage(void* pointer){
+		if (pointer == NULL) return;
+
+		Image image = *(Image*)pointer;
+		UnloadImage(image);
+	}
+	*\
+}
