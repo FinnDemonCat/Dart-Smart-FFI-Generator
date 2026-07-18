@@ -1,6 +1,6 @@
 # C Struct to Dart FFI Binding Generator
 
-Semi automatic Python script, built arround raylib C library code style conventions into Dart classes. Tailored for [Target]("https://github.com/FinnDemonCat/Target") Dart bindings project.
+Semi automatic Python script, built arround raylib C library code style conventions into Dart classes. Tailored for [Target](https://github.com/FinnDemonCat/Target) Dart bindings project.
 
 ---
 
@@ -74,4 +74,4 @@ void ClearBackground(Color color) => _imageClearBackground(pointer, color.ref);
 - Deconstructors / FinalizersFunctions listed under `# Deconstructor` are wrapped into custom Free C handles receiving a void* pointer, safely mapping memory release mechanisms for Dart's native garbage collection lifecycle management.
 
 ## ⚙️ NativeWrapper class
-[NativeWrapper]("https://github.com/FinnDemonCat/Target/blob/main/lib/native_wrapper/native_wrapper.dart") its a simple class created as a template for all these classes that wrap pointer instance of that struct.
+[NativeWrapper](https://github.com/FinnDemonCat/Target/blob/main/lib/native_wrapper/native_wrapper.dart) its a simple class created as a template for all these classes that wrap pointer instance of that struct.
